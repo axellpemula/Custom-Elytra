@@ -42,6 +42,10 @@ DESIGN_ICONS = {
     "seraph_gold": ("Golden Seraph", (38, 28, 12), "#ffe7a0"),
     "dragon": ("Void Dragon", (20, 10, 32), "#c07cf5"),
     "dragon_ember": ("Ember Dragon", (28, 11, 6), "#ff9a52"),
+    "aether": ("Aether Faerie", (29, 18, 48), "#e0a8ff"),
+    "aether_gold": ("Golden Faerie", (44, 34, 16), "#ffe9a0"),
+    "clockwork": ("Clockwork", (36, 28, 20), "#e0b84a"),
+    "clockwork_ice": ("Frostgear", (22, 34, 42), "#a8d8f0"),
 }
 
 RECOLOUR_ICONS = {

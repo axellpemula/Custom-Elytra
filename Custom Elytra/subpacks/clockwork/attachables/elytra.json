@@ -1,0 +1,36 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "minecraft:elytra",
+      "materials": {
+        "default": "phantom",
+        "enchanted": "elytra_glint"
+      },
+      "textures": {
+        "default": "textures/models/intity/samurai",
+        "enchanted": "textures/misc/enchanted_item_glint"
+      },
+      "geometry": {
+        "default": "geometry.elytra"
+      },
+      "animations": {
+        "default_controller": "controller.animation.elytra.default",
+        "idle": "animation.clockwork.idle",
+        "glide": "animation.clockwork.glide",
+        "sneak": "animation.clockwork.sneak",
+        "swim": "animation.clockwork.swim",
+        "sleep": "animation.clockwork.sleep"
+      },
+      "scripts": {
+        "parent_setup": "variable.chest_layer_visible = 0.0;",
+        "animate": [
+          "default_controller"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.armor"
+      ]
+    }
+  }
+}

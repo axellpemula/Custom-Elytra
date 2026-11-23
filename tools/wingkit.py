@@ -76,8 +76,9 @@ class Atlas:
         self._row_h = 0
 
     def alloc(self, w_px, h_px):
-        w_px = max(1, int(math.ceil(w_px)))
-        h_px = max(1, int(math.ceil(h_px)))
+        """Reserve an integer block of pixels and return its top-left corner."""
+        w_px = max(1, int(round(w_px)))
+        h_px = max(1, int(round(h_px)))
         if self._x + w_px + BOX_PAD > self.size:
             self._x = BOX_PAD
             self._y += self._row_h + BOX_PAD
@@ -175,6 +176,27 @@ def paint_face(w, h, palette, style="grad", axis="auto", seed=0):
                 arr[max(0, pos - 1) : pos + 1, :, :] *= 0.88
             else:
                 arr[:, max(0, pos - 1) : pos + 1, :] *= 0.88
+    elif style == "iris":
+        # butterfly membrane: bright core fading to a dark iridescent edge
+        hh, ww = arr.shape[:2]
+        yy, xx = np.mgrid[0:hh, 0:ww]
+        u = xx / max(1, ww - 1)
+        v = yy / max(1, hh - 1)
+        # radial-ish glow around 60% span
+        glow = np.exp(-(((u - 0.62) ** 2) / 0.10 + ((v - 0.5) ** 2) / 0.22))
+        arr += glow[..., None] * 26.0
+        # fine veins fanning out from the root
+        veins = np.abs(np.sin(np.arctan2(v - 0.5, u + 0.18) * 7.0)) < 0.10
+        arr[veins] *= 0.78
+        arr = np.clip(arr, 0, 255)
+    elif style == "rivet":
+        # metal plate with rivets along the long edges
+        hh, ww = arr.shape[:2]
+        col = np.array(hex_rgb(palette.get("rivet", "#f0d38a")), dtype=np.float32)
+        for x in range(2, ww - 1, max(3, ww // 5)):
+            for y in (1, hh - 2):
+                if 0 <= y < hh:
+                    arr[y, x] = col
     elif style == "crystal":
         # diagonal facet lines so shards read as cut gems, not stripes
         hh, ww = arr.shape[:2]
@@ -231,31 +253,50 @@ class Model:
 
     # -- geometry ----------------------------------------------------------
     def box(self, bone, origin, size, palette, rotation=None, pivot=None,
-            style="grad", mirror=False, inflate=None, faces=None):
-        """Add a cube. ``bone`` may be a name or a bone dict."""
+            style="grad", mirror=False, inflate=None, faces=None, compact=False):
+        """Add a cube. ``bone`` may be a name or a bone dict.
+
+        The atlas block is reserved from the *rounded* face sizes, so every face
+        rectangle always fits inside it (a mismatch used to leave faces
+        unpainted, which rendered as invisible geometry).
+        """
         if isinstance(bone, str):
             bone = self._by_name[bone]
         w, h, d = size
-        # box unwrap: width 2*(d+w), height d+h  (all in model units)
-        fw = 2 * (d + w)
-        fh = d + h
-        pos, pw, ph = self.atlas.alloc(fw * self.atlas.px, fh * self.atlas.px)
-
         pu = self.atlas.px
-        dw, ww, hh, dd = int(math.ceil(d * pu)), int(math.ceil(w * pu)), int(math.ceil(h * pu)), int(math.ceil(d * pu))
-        rects = {
-            "up": (pos[0] + dd, pos[1], max(1, ww), max(1, dd)),
-            "down": (pos[0] + dd + ww, pos[1], max(1, ww), max(1, dd)),
-            "east": (pos[0], pos[1] + dd, max(1, dw), max(1, hh)),
-            "north": (pos[0] + dd, pos[1] + dd, max(1, ww), max(1, hh)),
-            "west": (pos[0] + dd + ww, pos[1] + dd, max(1, dw), max(1, hh)),
-            "south": (pos[0] + dd + ww + dw, pos[1] + dd, max(1, ww), max(1, hh)),
-        }
-        # clamp rects to the allocated block
-        used = set()
+
+        ww = max(1, int(round(w * pu)))
+        hh = max(1, int(round(h * pu)))
+        dd = max(1, int(round(d * pu)))
+
+        if compact:
+            block_w, block_h = ww + dd, max(hh, dd)
+        else:
+            block_w, block_h = 2 * (dd + ww), dd + hh
+
+        pos, pw, ph = self.atlas.alloc(block_w, block_h)
+        assert pw >= block_w and ph >= block_h, (pw, ph, block_w, block_h)
+
+        if compact:
+            rects = {
+                "north": (pos[0], pos[1], ww, hh),
+                "south": (pos[0], pos[1], ww, hh),
+                "up": (pos[0] + ww, pos[1], dd, dd),
+                "down": (pos[0] + ww, pos[1], dd, dd),
+                "east": (pos[0] + ww, pos[1], dd, hh),
+                "west": (pos[0] + ww, pos[1], dd, hh),
+            }
+        else:
+            rects = {
+                "up": (pos[0] + dd, pos[1], ww, dd),
+                "down": (pos[0] + dd + ww, pos[1], ww, dd),
+                "east": (pos[0], pos[1] + dd, dd, hh),
+                "north": (pos[0] + dd, pos[1] + dd, ww, hh),
+                "west": (pos[0] + dd + ww, pos[1] + dd, dd, hh),
+                "south": (pos[0] + dd + ww + dd, pos[1] + dd, ww, hh),
+            }
+
         for name, (rx, ry, rw, rh) in rects.items():
-            if rx + rw > pos[0] + pw or ry + rh > pos[1] + ph:
-                continue
             if faces is not None and name not in faces:
                 continue
             style_name = style
@@ -263,7 +304,6 @@ class Model:
                 style_name = style.get(name, style.get("default", "grad"))
             arr = paint_face(rw, rh, palette, style=style_name, seed=hash((name, rx, ry)) % 1000)
             self.atlas.put((rx, ry), rw, rh, arr)
-            used.add(name)
 
         uv = {}
         for name, (rx, ry, rw, rh) in rects.items():

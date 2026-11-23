@@ -1,0 +1,186 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.clockwork_ice.idle": {
+      "loop": true,
+      "animation_length": 4.0,
+      "bones": {
+        "clockwork_wing_l": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              4
+            ],
+            "2.0": [
+              0,
+              0,
+              9
+            ],
+            "4.0": [
+              0,
+              0,
+              4
+            ]
+          }
+        },
+        "clockwork_wing_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -4
+            ],
+            "2.0": [
+              0,
+              0,
+              -9
+            ],
+            "4.0": [
+              0,
+              0,
+              -4
+            ]
+          }
+        }
+      }
+    },
+    "animation.clockwork_ice.glide": {
+      "loop": true,
+      "animation_length": 1.2,
+      "bones": {
+        "clockwork_wing_l": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              26
+            ],
+            "0.45": [
+              0,
+              0,
+              -8
+            ],
+            "0.8": [
+              0,
+              0,
+              20
+            ],
+            "1.2": [
+              0,
+              0,
+              26
+            ]
+          }
+        },
+        "clockwork_wing_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -26
+            ],
+            "0.45": [
+              0,
+              0,
+              8
+            ],
+            "0.8": [
+              0,
+              0,
+              -20
+            ],
+            "1.2": [
+              0,
+              0,
+              -26
+            ]
+          }
+        }
+      }
+    },
+    "animation.clockwork_ice.sneak": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.3,
+      "bones": {
+        "clockwork_wing_l": {
+          "rotation": [
+            0,
+            62,
+            -18
+          ]
+        },
+        "clockwork_wing_r": {
+          "rotation": [
+            0,
+            -62,
+            18
+          ]
+        }
+      }
+    },
+    "animation.clockwork_ice.swim": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "clockwork_wing_l": {
+          "rotation": {
+            "0.0": [
+              0,
+              -18,
+              -12
+            ],
+            "1.0": [
+              0,
+              -26,
+              -4
+            ],
+            "2.0": [
+              0,
+              -18,
+              -12
+            ]
+          }
+        },
+        "clockwork_wing_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              18,
+              12
+            ],
+            "1.0": [
+              0,
+              26,
+              4
+            ],
+            "2.0": [
+              0,
+              18,
+              12
+            ]
+          }
+        }
+      }
+    },
+    "animation.clockwork_ice.sleep": {
+      "loop": true,
+      "bones": {
+        "clockwork_wing_l": {
+          "rotation": [
+            0,
+            70,
+            -30
+          ]
+        },
+        "clockwork_wing_r": {
+          "rotation": [
+            0,
+            -70,
+            30
+          ]
+        }
+      }
+    }
+  }
+}

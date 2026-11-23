@@ -25,6 +25,10 @@ Semua skin dipilih di dalam game lewat **Pack Settings**, tidak perlu ganti file
 | `Golden Seraph` | Sama, versi emas suci | Emas-putih |
 | `Void Dragon` | Sayap kelelawar/naga: tulang + membran teregang | Ungu void |
 | `Ember Dragon` | Sama, palet bara | Cokelat-oranye |
+| `Aether Faerie` | 4 sayap kupu-kupu: forewing besar + hindwing menggantung, veins iridescent | Ungu-lavender |
+| `Golden Faerie` | Sama, versi emas | Emas-krem |
+| `Clockwork` | Sayap mekanik: lamela kuningan/tembaga bertumpuk + gear hub + piston | Kuningan-tembaga |
+| `Frostgear` | Sama, versi dingin | Baja-biru es |
 
 ### Recolour samurai
 
@@ -110,6 +114,10 @@ m.feather(wing, pivot=[1.95, 25.5, 1.95], length=9.0, width=1.5,
 - `dir=1` untuk sayap kanan model (sisi +x), `dir=-1` untuk yang kiri.
 - `faces=(...)` memilih sisi cube yang dibuat; untuk lempengan tipis pakai
   `("north", "south")` supaya tidak ada sisi jarum yang ikut terlihat.
+- `compact=True` memakai unwrap ringkas untuk cube kecil (gear, rivet, gem),
+  supaya atlas 256×256 tidak cepat penuh.
+- Painter yang tersedia: `grad`, `facet`, `barb`, `leaf`, `crystal`, `spot`,
+  `iris` (membran kupu-kupu), `rivet` (pelat logam).
 - Tekstur 256×256 dengan 1 unit uv = 1 px (kualitas 4 px per unit model);
   angka ini bisa dinaikkan ke 512 kalau butuh lebih tajam.
 
@@ -119,6 +127,10 @@ Butuh `pillow` dan `numpy` (`pip install pillow numpy`).
 
 - `min_engine_version` diset `[1, 21, 0]`. Nilai lebih tinggi dari versi game
   membuat pack **tidak muncul sama sekali** di Global Resources.
+- Atlas tekstur mengalokasikan blok dari ukuran face yang sudah dibulatkan,
+  karena rect UV yang melebihi blok-nya dulu dilewati dan membuat face
+  transparan (geometri tidak terlihat). `validate_pack.py` sekarang gagal kalau
+  ada face model buatan repo ini yang menunjuk piksel transparan.
 - Attachable default di pack asli merujuk
   `controller.animation.elytra.default`, yang tidak ada di file
   `animation_controllers` (isinya `controller.animation.elytra`). Subpack model

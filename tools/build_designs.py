@@ -79,6 +79,44 @@ PALETTES = {
         "stops": ["#080610", "#1a1728", "#322e4c", "#504a70"],
         "outline": "#030206", "outline_width": 0, "rim": "#6f6aa8", "rim_end": False,
     },
+    # -- aether (butterfly / faerie) ---------------------------------------
+    "aether_body": {
+        "stops": ["#2b1f4a", "#4a3170", "#6f4f9c", "#a37fd0"],
+        "outline": "#170f2a", "outline_width": 0, "rim": "#e0c8ff", "rim_end": False,
+    },
+    "aether_wing": {
+        "stops": ["#3a2168", "#6b3fa0", "#a95fd0", "#e08fe8", "#ffe0f8"],
+        "outline": "#1d0f38", "outline_width": 0, "rim": "#fff0ff", "rim_end": True,
+        "spot": "#fff4ff",
+    },
+    "aether_eye": {
+        "stops": ["#1a0d2e", "#3d1f66", "#7a3fb0", "#c86fe0", "#ffe8ff"],
+        "outline": "#120820", "outline_width": 0, "rim": "#ffe8ff", "rim_end": False,
+        "spot": "#ffffff",
+    },
+    "aether_gold": {
+        "stops": ["#4a3410", "#8a6a1e", "#d0a83c", "#ffe9a0"],
+        "outline": "#2a1d08", "outline_width": 0, "rim": "#fff6d0", "rim_end": False,
+    },
+    # -- clockwork (steampunk) ---------------------------------------------
+    "clock_body": {
+        "stops": ["#241d18", "#3d3229", "#5a4a3a", "#7d6a52"],
+        "outline": "#100c09", "outline_width": 0, "rim": "#b09a72", "rim_end": False,
+    },
+    "clock_brass": {
+        "stops": ["#4a3410", "#7d5a18", "#b08a2e", "#e0b84a", "#f7df8e"],
+        "outline": "#261a06", "outline_width": 0, "rim": "#fff0b8", "rim_end": True,
+        "rivet": "#2b1f0c",
+    },
+    "clock_copper": {
+        "stops": ["#3a180e", "#6b2c14", "#a8481e", "#d9743a", "#f7a86a"],
+        "outline": "#1d0a05", "outline_width": 0, "rim": "#ffd0a0", "rim_end": True,
+        "rivet": "#2b1208",
+    },
+    "clock_gear": {
+        "stops": ["#2e2a24", "#4f493f", "#7d7362", "#b0a48c"],
+        "outline": "#15130f", "outline_width": 0, "rim": "#d8cbb0", "rim_end": False,
+    },
 }
 
 # dark / variants reuse the same shapes with a shifted palette
@@ -104,6 +142,40 @@ VARIANTS = {
             "stops": ["#b08a2a", "#e8c85c", "#fff2b0", "#fffdf2"],
             "outline": "#5c4410", "outline_width": 0, "rim": "#ffffff", "rim_end": False,
             "spot": "#fffdf2",
+        },
+    },
+    "aether": {},
+    "aether_gold": {
+        "aether_wing": {
+            "stops": ["#4a3410", "#8a6a1e", "#d0a83c", "#ffe9a0", "#fffbe8"],
+            "outline": "#2a1d08", "outline_width": 0, "rim": "#fffbe8", "rim_end": True,
+            "spot": "#fffbe8",
+        },
+        "aether_eye": {
+            "stops": ["#2a1d08", "#6b5214", "#c09a30", "#ffe9a0", "#ffffff"],
+            "outline": "#160f04", "outline_width": 0, "rim": "#fffbe8", "rim_end": False,
+            "spot": "#ffffff",
+        },
+        "aether_body": {
+            "stops": ["#4a3410", "#7d5a18", "#c09a30", "#ffe9a0"],
+            "outline": "#2a1d08", "outline_width": 0, "rim": "#fff6d0", "rim_end": False,
+        },
+    },
+    "clockwork": {},
+    "clockwork_ice": {
+        "clock_brass": {
+            "stops": ["#20303a", "#33566b", "#5a93b0", "#a8d8f0", "#e8f8ff"],
+            "outline": "#101a20", "outline_width": 0, "rim": "#f0fbff", "rim_end": True,
+            "rivet": "#16303c",
+        },
+        "clock_copper": {
+            "stops": ["#1a2630", "#2b4a5c", "#3d6b80", "#6fa8c0", "#a8d8f0"],
+            "outline": "#0c141a", "outline_width": 0, "rim": "#e0f6ff", "rim_end": True,
+            "rivet": "#12242e",
+        },
+        "clock_gear": {
+            "stops": ["#2a2e30", "#464f52", "#6d7a7e", "#a0adb2"],
+            "outline": "#121617", "outline_width": 0, "rim": "#d0dee2", "rim_end": False,
         },
     },
     "dragon": {},
@@ -150,7 +222,8 @@ def build_phoenix(identifier="geometry.elytra", variant="phoenix", atlas=256):
     spine = m.bone("phoenix_spine", pivot=[0, 23, 2.0], parent="body")
     m.box(spine, [-2.1, 23.2, 1.7], [4.2, 5.0, 1.15], body_pal, style="grad")
     m.box(spine, [-2.5, 27.7, 1.55], [5.0, 1.0, 1.55], crest_pal, style="grad")
-    m.box(spine, [-1.1, 24.9, 2.72], [2.2, 2.2, 0.40], crest_pal, style="facet")
+    m.box(spine, [-1.1, 24.9, 2.72], [2.2, 2.2, 0.40], crest_pal, style="facet",
+          faces=("north",), compact=True)
 
     # -- wings -------------------------------------------------------------
     # (count, length, width, thickness, sweep0, sweep1, droop0, droop1, y, z)
@@ -214,7 +287,8 @@ def build_seraph(identifier="geometry.elytra", variant="seraph", atlas=256):
     spine = m.bone("seraph_spine", pivot=[0, 23, 2.0], parent="body")
     m.box(spine, [-2.0, 23.4, 1.75], [4.0, 4.8, 1.05], frame_pal, style="grad")
     m.box(spine, [-2.4, 27.6, 1.6], [4.8, 0.9, 1.45], frame_pal, style="grad")
-    m.box(spine, [-1.0, 25.0, 2.66], [2.0, 2.0, 0.35], shard_pal, style="facet")
+    m.box(spine, [-1.0, 25.0, 2.66], [2.0, 2.0, 0.35], shard_pal, style="facet",
+          faces=("north",), compact=True)
 
     for side, name in ((1, "seraph_wing_l"), (-1, "seraph_wing_r")):
         wing = m.bone(name, pivot=[2.0 * side, 25.4, 1.7], parent="body")
@@ -337,6 +411,137 @@ def build_dragon(identifier="geometry.elytra", variant="dragon", atlas=256):
 
 
 # --------------------------------------------------------------------------
+# aether (butterfly / faerie)
+# --------------------------------------------------------------------------
+
+
+def build_aether(identifier="geometry.elytra", variant="aether", atlas=256):
+    """Butterfly wings built from overlapping rounded lobes: a big forewing
+    fan, a smaller hindwing fan, plus eyespots painted straight into the
+    membrane texture (so none of the plates float loose)."""
+    m = Model(identifier, atlas_size=atlas, texture_width=atlas, texture_height=atlas,
+              visible_bounds=(11, 6, 0, 1.75, 0))
+    body_pal = palette("aether_body", variant)
+    wing_pal = palette("aether_wing", variant)
+    eye_pal = palette("aether_eye", variant)
+    gold_pal = palette("aether_gold", variant)
+
+    body = m.bone("body", pivot=[0, 24, 0])
+    spine = m.bone("aether_spine", pivot=[0, 23, 2.0], parent="body")
+    m.box(spine, [-1.8, 23.0, 1.8], [3.6, 5.2, 1.0], body_pal, style="grad")
+    for i in range(3):
+        m.box(spine, [-1.95, 24.0 + i * 1.5, 2.05], [3.9, 0.35, 0.85], gold_pal,
+              style="rivet", compact=True)
+    m.box(spine, [-0.8, 26.0, 2.9], [1.6, 1.6, 0.35], eye_pal, style="spot",
+          faces=("north",), compact=True)
+
+    for side, name in ((1, "aether_wing_l"), (-1, "aether_wing_r")):
+        wing = m.bone(name, pivot=[1.5 * side, 25.0, 1.6], parent="body")
+        root = 1.45
+
+        # --- forewing fan (wide, swept back) ------------------------------
+        fore = [
+            # sweep, length, width, thickness, droop
+            (8, 8.2, 3.2, 0.30, 32),
+            (20, 10.2, 3.7, 0.30, 29),
+            (32, 10.0, 3.7, 0.30, 26),
+            (44, 9.2, 3.4, 0.28, 23),
+            (56, 8.2, 3.1, 0.28, 19),
+            (68, 7.0, 2.8, 0.26, 15),
+        ]
+        for sweep, ln, wd, th, droop in fore:
+            m.feather(wing, pivot=[root * side, 25.6, 1.62], length=ln, width=wd,
+                      thickness=th, palette=wing_pal, sweep=sweep, droop=droop,
+                      segments=3, taper=0.42, dir=side, style="iris",
+                      faces=("north", "south"), overlap=0.10)
+
+        # --- hindwing fan (rounder, hangs lower) --------------------------
+        hind = [
+            (80, 7.6, 3.0, 0.28, 74),
+            (94, 7.4, 3.0, 0.26, 70),
+            (108, 6.8, 2.8, 0.26, 66),
+            (122, 5.8, 2.6, 0.24, 62),
+            (136, 4.8, 2.3, 0.24, 58),
+        ]
+        for sweep, ln, wd, th, droop in hind:
+            m.feather(wing, pivot=[root * side, 24.6, 1.78], length=ln, width=wd,
+                      thickness=th, palette=wing_pal, sweep=sweep, droop=droop,
+                      segments=3, taper=0.40, dir=side, style="iris",
+                      faces=("north", "south"), overlap=0.10)
+
+        # --- gold root cap hiding where the lobes meet the body -----------
+        # origin is the minimum corner, so the right wing starts at -root
+        cap_x = (root - 0.55) if side > 0 else -root
+        m.box(wing, [cap_x, 25.0, 1.45], [1.1, 1.6, 0.55], gold_pal,
+              style="rivet", compact=True)
+    return m
+
+
+# --------------------------------------------------------------------------
+# clockwork (steampunk)
+# --------------------------------------------------------------------------
+
+
+def build_clockwork(identifier="geometry.elytra", variant="clockwork", atlas=256):
+    """Mechanical wings: overlapping brass lamellae, a gear hub at the shoulder
+    and exposed piston rods running along the wing."""
+    m = Model(identifier, atlas_size=atlas, texture_width=atlas, texture_height=atlas,
+              visible_bounds=(11, 6, 0, 1.75, 0))
+    body_pal = palette("clock_body", variant)
+    brass_pal = palette("clock_brass", variant)
+    copper_pal = palette("clock_copper", variant)
+    gear_pal = palette("clock_gear", variant)
+
+    body = m.bone("body", pivot=[0, 24, 0])
+    spine = m.bone("clockwork_spine", pivot=[0, 23, 2.0], parent="body")
+    m.box(spine, [-2.1, 23.0, 1.65], [4.2, 5.3, 1.15], body_pal, style="grad")
+    m.box(spine, [-2.5, 27.6, 1.5], [5.0, 1.1, 1.5], brass_pal, style="rivet")
+    for x in (-1.5, 1.5):
+        m.box(spine, [x - 0.3, 28.55, 1.4], [0.6, 1.5, 0.6], copper_pal,
+              rotation=[-12, 0, 0], pivot=[x, 28.55, 1.4], style="grad", compact=True)
+    m.box(spine, [-1.0, 24.4, 2.85], [2.0, 2.0, 0.3], gear_pal, style="rivet",
+          faces=("north",), compact=True)
+
+    for side, name in ((1, "clockwork_wing_l"), (-1, "clockwork_wing_r")):
+        wing = m.bone(name, pivot=[2.0 * side, 25.2, 1.7], parent="body")
+        root = 1.6
+
+        # --- gear hub at the shoulder -------------------------------------
+        hx, hy, hz = root * side, 25.15, 2.05
+        m.box(wing, [hx - 1.0, hy - 1.0, hz - 0.22], [2.0, 2.0, 0.44],
+              gear_pal, style="rivet", compact=True)
+        for k in range(8):
+            a = math.radians(k * 45)
+            gx = hx + math.cos(a) * 1.28
+            gy = hy + math.sin(a) * 1.28
+            m.box(wing, [gx - 0.26, gy - 0.26, hz - 0.18], [0.52, 0.52, 0.36],
+                  gear_pal, rotation=[0, 0, k * 45], pivot=[gx, gy, hz],
+                  style="rivet", compact=True)
+        m.box(wing, [hx - 0.32, hy - 0.32, hz - 0.3], [0.64, 0.64, 0.7],
+              copper_pal, style="grad", compact=True)
+
+        # --- overlapping lamellae, alternating brass and copper -----------
+        blades = 9
+        for i in range(blades):
+            t = i / (blades - 1)
+            sweep = 6 + 84 * t
+            ln = 10.2 - 4.4 * t
+            droop = 30 - 12 * t
+            pal = brass_pal if i % 2 == 0 else copper_pal
+            m.feather(wing, pivot=[root * side, 25.35, 1.90 - 0.03 * i],
+                      length=ln, width=2.05, thickness=0.45, palette=pal,
+                      sweep=sweep, droop=droop, segments=2, taper=0.55, dir=side,
+                      style="rivet", overlap=0.16)
+
+        # --- chunky piston along the leading edge -------------------------
+        m.feather(wing, pivot=[root * side + 0.1 * side, 25.05, 2.02],
+                  length=7.4, width=1.05, thickness=1.05, palette=gear_pal,
+                  sweep=10, droop=26, segments=2, taper=0.9, dir=side,
+                  style="grad")
+    return m
+
+
+# --------------------------------------------------------------------------
 # registry
 # --------------------------------------------------------------------------
 
@@ -353,6 +558,14 @@ DESIGNS = {
                    icon_bg="#150c22", accent="#b06cf0"),
     "dragon_ember": dict(builder=build_dragon, variant="dragon_ember", label="Ember Dragon",
                          icon_bg="#1c0c07", accent="#ff8a3c"),
+    "aether": dict(builder=build_aether, variant="aether", label="Aether Faerie",
+                   icon_bg="#1d1230", accent="#e0a8ff"),
+    "aether_gold": dict(builder=build_aether, variant="aether_gold", label="Golden Faerie",
+                        icon_bg="#2c2210", accent="#ffe9a0"),
+    "clockwork": dict(builder=build_clockwork, variant="clockwork", label="Clockwork",
+                      icon_bg="#241c14", accent="#e0b84a"),
+    "clockwork_ice": dict(builder=build_clockwork, variant="clockwork_ice", label="Frostgear",
+                          icon_bg="#16222a", accent="#a8d8f0"),
 }
 
 

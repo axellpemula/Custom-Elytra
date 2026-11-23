@@ -144,6 +144,64 @@ def check_geometry(tex_rel):
     return tw, th
 
 
+def check_painted_faces(subpacks):
+    """Guard against atlas packing bugs: a face whose uv rect lands on fully
+    transparent pixels renders as invisible geometry in game."""
+    import numpy as np
+
+    # only the models this repo generates are held to the strict rule; the
+    # original samurai texture intentionally leaves some faces transparent
+    targets = []
+    for sub in subpacks:
+        folder = sub.get("folder_name")
+        if not folder:
+            continue
+        base = os.path.join(PACK, "subpacks", folder)
+        if os.path.exists(os.path.join(base, "models", "mobs.json")):
+            targets.append((base, "subpack %r" % folder))
+
+    for base, label in targets:
+        geo_path = os.path.join(base, "models", "mobs.json")
+        try:
+            with open(geo_path, encoding="utf-8-sig") as fh:
+                geo = json.load(fh)["minecraft:geometry"][0]
+        except Exception:  # noqa: BLE001
+            continue
+        try:
+            with open(os.path.join(base, "attachables", "elytra.json"), encoding="utf-8-sig") as fh:
+                tex_rel = json.load(fh)["minecraft:attachable"]["description"]["textures"]["default"]
+        except Exception:  # noqa: BLE001
+            tex_rel = "textures/models/intity/samurai"
+        tex_path = os.path.join(base, tex_rel + ".png")
+        if not os.path.exists(tex_path):
+            continue
+        arr = np.asarray(Image.open(tex_path).convert("RGBA"))
+        h, w = arr.shape[:2]
+        tw = geo["description"].get("texture_width", w)
+        th = geo["description"].get("texture_height", h)
+        empty = total = 0
+        for bone in geo.get("bones", []):
+            for cube in bone.get("cubes", []):
+                uv = cube.get("uv")
+                if not isinstance(uv, dict):
+                    continue
+                for _face, rect in uv.items():
+                    total += 1
+                    u, v = rect["uv"]
+                    du, dv = rect["uv_size"]
+                    x0, y0 = int(round(u / tw * w)), int(round(v / th * h))
+                    x1 = max(x0 + 1, int(round((u + du) / tw * w)))
+                    y1 = max(y0 + 1, int(round((v + dv) / th * h)))
+                    sub = arr[y0:y1, x0:x1, 3]
+                    if sub.size == 0 or (sub > 0).sum() == 0:
+                        empty += 1
+        if empty:
+            errors.append(
+                "%s: %d/%d cube faces point at transparent texture"
+                % (label, empty, total)
+            )
+
+
 def check_subpack_models(subpacks):
     """Design subpacks (the ones that ship models/) must be self consistent."""
     for sub in subpacks:
@@ -218,6 +276,7 @@ def main():
     check_geometry(tex_rel)
     check_subpack_textures(subpacks, tex_rel)
     check_subpack_models(subpacks)
+    check_painted_faces(subpacks)
 
     for w in warnings:
         print("WARN  " + w)

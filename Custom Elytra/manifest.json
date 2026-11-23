@@ -93,9 +93,29 @@
       "memory_tier": 12
     },
     {
+      "folder_name": "aether",
+      "name": "Aether Faerie",
+      "memory_tier": 13
+    },
+    {
+      "folder_name": "aether_gold",
+      "name": "Golden Faerie",
+      "memory_tier": 14
+    },
+    {
+      "folder_name": "clockwork",
+      "name": "Clockwork",
+      "memory_tier": 15
+    },
+    {
+      "folder_name": "clockwork_ice",
+      "name": "Frostgear",
+      "memory_tier": 16
+    },
+    {
       "folder_name": "original_samurai",
       "name": "Samurai (Original)",
-      "memory_tier": 13
+      "memory_tier": 17
     }
   ]
 }
