@@ -1,0 +1,20 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Skin Custom Elytra",
+    "description": "skin elytra. By xVoid Axell",
+    "min_engine_version": [1, 26, 0],
+    "uuid": "843b8408-b435-46a8-8d78-f703e6b7d20b",
+    "version": [1, 0, 0]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "1918417d-a33f-4743-8c5b-83735b282cde",
+      "version": [1, 0, 0]
+    }
+  ],
+  "metadata": {
+    "authors": ["xVoid Axell"]
+  }
+}

@@ -1,0 +1,145 @@
+{
+    "format_version": "1.10.0",
+    "animation_controllers": {
+        "controller.animation.elytra": {
+            "initial_state": "default",
+            "states": {
+                "default": {
+                    "animations": [
+                        "elytra_default"
+                    ],
+                    "transitions": [
+                        {
+                            "gliding": "query.is_gliding"
+                        },
+                        {
+                            "sneaking": "query.is_sneaking"
+                        },
+                        {
+                            "swimming": "query.is_swimming"
+                        },
+                        {
+                            "sleeping": "query.is_sleeping"
+                        }
+                    ],
+                    "sound_effects": {
+                        "flap": "custom.elytra_flap"
+                    },
+                    "timeline": {
+                        "0.0": [
+                            "sound_effects.flap"
+                        ]
+                    }
+                },
+                "gliding": {
+                    "animations": [
+                        "elytra_glide"
+                    ],
+                    "transitions": [
+                        {
+                            "default": "!query.is_gliding"
+                        },
+                        {
+                            "sneaking": "query.is_sneaking"
+                        },
+                        {
+                            "swimming": "query.is_swimming"
+                        },
+                        {
+                            "sleeping": "query.is_sleeping"
+                        }
+                    ],
+                    "sound_effects": {
+                        "flap": "custom.elytra_flap"
+                    },
+                    "timeline": {
+                        "0.0": [
+                            "sound_effects.flap"
+                        ]
+                    }
+                },
+                "sneaking": {
+                    "animations": [
+                        "elytra_sneak"
+                    ],
+                    "transitions": [
+                        {
+                            "default": "!query.is_sneaking"
+                        },
+                        {
+                            "gliding": "query.is_gliding"
+                        },
+                        {
+                            "swimming": "query.is_swimming"
+                        },
+                        {
+                            "sleeping": "query.is_sleeping"
+                        }
+                    ],
+                    "sound_effects": {
+                        "flap": "custom.elytra_flap"
+                    },
+                    "timeline": {
+                        "0.0": [
+                            "sound_effects.flap"
+                        ]
+                    }
+                },
+                "swimming": {
+                    "animations": [
+                        "elytra_swim"
+                    ],
+                    "transitions": [
+                        {
+                            "default": "!query.is_swimming"
+                        },
+                        {
+                            "gliding": "query.is_gliding"
+                        },
+                        {
+                            "sneaking": "query.is_sneaking"
+                        },
+                        {
+                            "sleeping": "query.is_sleeping"
+                        }
+                    ],
+                    "sound_effects": {
+                        "flap": "custom.elytra_flap"
+                    },
+                    "timeline": {
+                        "0.0": [
+                            "sound_effects.flap"
+                        ]
+                    }
+                },
+                "sleeping": {
+                    "animations": [
+                        "elytra_sleep"
+                    ],
+                    "transitions": [
+                        {
+                            "default": "!query.is_sleeping"
+                        },
+                        {
+                            "gliding": "query.is_gliding"
+                        },
+                        {
+                            "sneaking": "query.is_sneaking"
+                        },
+                        {
+                            "swimming": "query.is_swimming"
+                        }
+                    ],
+                    "sound_effects": {
+                        "flap": "custom.elytra_flap"
+                    },
+                    "timeline": {
+                        "0.0": [
+                            "sound_effects.flap"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
