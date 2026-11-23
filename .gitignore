@@ -1,0 +1,8 @@
+# build output - the .mcpack is intentionally tracked so it can be downloaded
+# straight from the repository for testing in game
+dist/*
+!dist/*.mcpack
+
+# python
+__pycache__/
+*.pyc

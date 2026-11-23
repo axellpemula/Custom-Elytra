@@ -2,19 +2,120 @@
   "format_version": 2,
   "header": {
     "name": "Skin Custom Elytra",
-    "description": "skin elytra. By xVoid Axell",
-    "min_engine_version": [1, 26, 0],
+    "description": "Custom elytra skins: original samurai, recolour themes and three new models (Phoenix, Seraph, Dragon). Pick one in Pack Settings. By xVoid Axell",
+    "min_engine_version": [
+      1,
+      21,
+      0
+    ],
     "uuid": "843b8408-b435-46a8-8d78-f703e6b7d20b",
-    "version": [1, 0, 0]
+    "version": [
+      1,
+      0,
+      0
+    ]
   },
   "modules": [
     {
       "type": "resources",
       "uuid": "1918417d-a33f-4743-8c5b-83735b282cde",
-      "version": [1, 0, 0]
+      "version": [
+        1,
+        0,
+        0
+      ]
     }
   ],
   "metadata": {
-    "authors": ["xVoid Axell"]
-  }
+    "authors": [
+      "xVoid Axell"
+    ]
+  },
+  "subpacks": [
+    {
+      "folder_name": "fantasy_frost",
+      "name": "Recolour - Frost",
+      "memory_tier": 1
+    },
+    {
+      "folder_name": "fantasy_inferno",
+      "name": "Recolour - Inferno",
+      "memory_tier": 2
+    },
+    {
+      "folder_name": "fantasy_void",
+      "name": "Recolour - Void",
+      "memory_tier": 3
+    },
+    {
+      "folder_name": "fantasy_verdant",
+      "name": "Recolour - Verdant",
+      "memory_tier": 4
+    },
+    {
+      "folder_name": "fantasy_astral",
+      "name": "Recolour - Astral",
+      "memory_tier": 5
+    },
+    {
+      "folder_name": "fantasy_celestial",
+      "name": "Recolour - Celestial",
+      "memory_tier": 6
+    },
+    {
+      "folder_name": "phoenix",
+      "name": "Phoenix",
+      "memory_tier": 7
+    },
+    {
+      "folder_name": "phoenix_dark",
+      "name": "Dark Phoenix",
+      "memory_tier": 8
+    },
+    {
+      "folder_name": "seraph",
+      "name": "Seraph",
+      "memory_tier": 9
+    },
+    {
+      "folder_name": "seraph_gold",
+      "name": "Golden Seraph",
+      "memory_tier": 10
+    },
+    {
+      "folder_name": "dragon",
+      "name": "Void Dragon",
+      "memory_tier": 11
+    },
+    {
+      "folder_name": "dragon_ember",
+      "name": "Ember Dragon",
+      "memory_tier": 12
+    },
+    {
+      "folder_name": "aether",
+      "name": "Aether Faerie",
+      "memory_tier": 13
+    },
+    {
+      "folder_name": "aether_gold",
+      "name": "Golden Faerie",
+      "memory_tier": 14
+    },
+    {
+      "folder_name": "clockwork",
+      "name": "Clockwork",
+      "memory_tier": 15
+    },
+    {
+      "folder_name": "clockwork_ice",
+      "name": "Frostgear",
+      "memory_tier": 16
+    },
+    {
+      "folder_name": "original_samurai",
+      "name": "Samurai (Original)",
+      "memory_tier": 17
+    }
+  ]
 }
