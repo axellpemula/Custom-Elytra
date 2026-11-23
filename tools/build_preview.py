@@ -10,14 +10,17 @@ Usage:
 
 import json
 import os
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACK = os.path.join(ROOT, "Custom Elytra")
 OUT = os.path.join(ROOT, "docs", "skins-preview.png")
 
-CARD_W = 360          # width of one card in the sheet
+CARD_W = 300          # width of one card in the sheet
 PAD = 18              # padding between cards
 LABEL_H = 34          # space under each card for the name
 BG = (22, 22, 27, 255)
@@ -40,7 +43,7 @@ def card(path):
     bbox = img.getbbox()
     if bbox:
         img = img.crop(bbox)
-    scale = min(CARD_W / img.width, 320 / img.height)
+    scale = min(CARD_W / img.width, CARD_W / img.height)
     return img.resize(
         (max(1, int(img.width * scale)), max(1, int(img.height * scale))),
         Image.LANCZOS,
@@ -51,8 +54,18 @@ def main():
     with open(os.path.join(PACK, "manifest.json"), encoding="utf-8") as fh:
         manifest = json.load(fh)
 
+    subs = list(manifest.get("subpacks", []))
+
+    def sort_key(sub):
+        name = sub["name"]
+        if name.startswith("Samurai"):
+            return (0, name)
+        if name.startswith("Recolour"):
+            return (2, name)
+        return (1, name)
+
     entries = []
-    for sub in manifest.get("subpacks", []):
+    for sub in sorted(subs, key=sort_key):
         icon = os.path.join(PACK, "subpacks", sub["folder_name"], "pack_icon.png")
         if os.path.exists(icon):
             entries.append((sub["name"], card(icon)))
@@ -63,13 +76,13 @@ def main():
     small = load_font(13)
 
     sheet_w = PAD + len(entries) * (CARD_W + PAD)
-    sheet_h = PAD + 320 + LABEL_H + PAD + 26
+    sheet_h = PAD + CARD_W + LABEL_H + PAD + 26
     sheet = Image.new("RGBA", (sheet_w, sheet_h), BG)
     draw = ImageDraw.Draw(sheet)
 
     draw.text(
         (PAD, 8),
-        "Custom Elytra - fantasy skin variants  (%d subpacks)" % len(entries),
+        "Custom Elytra - new models + recolours  (%d subpacks)" % len(entries),
         font=small,
         fill=(150, 156, 170, 255),
     )
@@ -77,15 +90,15 @@ def main():
     x = PAD
     top = PAD + 20
     for name, img in entries:
-        draw.rectangle([x, top, x + CARD_W, top + 320], fill=CARD_BG)
+        draw.rectangle([x, top, x + CARD_W, top + CARD_W], fill=CARD_BG)
         sheet.paste(
             img,
-            (x + (CARD_W - img.width) // 2, top + (320 - img.height) // 2),
+            (x + (CARD_W - img.width) // 2, top + (CARD_W - img.height) // 2),
             img,
         )
         tw = draw.textlength(name, font=font)
         draw.text(
-            (x + (CARD_W - tw) / 2, top + 320 + 8),
+            (x + (CARD_W - tw) / 2, top + CARD_W + 8),
             name,
             font=font,
             fill=(238, 238, 244, 255),

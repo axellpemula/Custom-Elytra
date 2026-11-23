@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-Generate fantasy skin variants for the Custom Elytra resource pack.
+Recoloured variants of the ORIGINAL samurai elytra.
+
+These keep the samurai model and only shift its palette, so they are marked as
+"Recolour" in the manifest to stay clearly separated from the from-scratch
+models in tools/build_designs.py.
 
 The original texture (textures/models/intity/samurai.png) uses exactly 32 opaque
 colours, each belonging to a small "family" (charcoal armour, gold trim, red
@@ -9,7 +13,8 @@ families onto a new theme palette in HSV space, which keeps the pixel-art
 shading, the hue noise inside each family and the alpha channel untouched.
 
 Usage:
-    python3 tools/generate_variants.py
+    python3 tools/generate_variants.py      # writes the subpack textures
+    python3 tools/build_pack.py             # rebuilds manifest + mcpack
 """
 
 import colorsys
@@ -283,18 +288,20 @@ def recolor_icon(src, lut, dst, tolerance=2600):
     return img
 
 
-def main():
+def generate():
+    """Write every recolour subpack and return its manifest entry."""
     os.makedirs(os.path.join(PACK, "subpacks"), exist_ok=True)
-
-    # 1. the original artwork is re-used as its own subpack so players can
-    #    always switch back to the vanilla look of this pack.
-    original_dir = os.path.join(PACK, "subpacks", "original_samurai")
-    os.makedirs(os.path.join(original_dir, "textures", "models", "intity"), exist_ok=True)
-    shutil.copy2(TEXTURE, os.path.join(original_dir, "textures", "models", "intity", "samurai.png"))
-    shutil.copy2(ICON, os.path.join(original_dir, "pack_icon.png"))
-
     subpacks = []
-    tier = 1
+
+    # the original artwork is re-used as its own subpack so players can always
+    # switch back to the untouched samurai look
+    original_dir = os.path.join(PACK, "subpacks", "original_samurai")
+    tex_dir = os.path.join(original_dir, "textures", "models", "intity")
+    os.makedirs(tex_dir, exist_ok=True)
+    shutil.copy2(TEXTURE, os.path.join(tex_dir, "samurai.png"))
+    shutil.copy2(ICON, os.path.join(original_dir, "pack_icon.png"))
+    subpacks.append({"folder_name": "original_samurai", "name": "Samurai (Original)"})
+
     for folder, theme in THEMES.items():
         lut = build_lut(theme)
         out_dir = os.path.join(PACK, "subpacks", folder)
@@ -302,30 +309,15 @@ def main():
         os.makedirs(tex_dir, exist_ok=True)
         recolor_texture(TEXTURE, lut, os.path.join(tex_dir, "samurai.png"))
         recolor_icon(ICON, lut, os.path.join(out_dir, "pack_icon.png"))
-        subpacks.append(
-            {"folder_name": folder, "name": "Fantasy - %s" % theme["label"], "memory_tier": tier}
-        )
-        print("generated", folder, "->", theme["label"])
-        tier += 1
+        subpacks.append({"folder_name": folder, "name": "Recolour - %s" % theme["label"]})
+    return subpacks
 
-    # The game picks the subpack with the highest available memory tier as the
-    # default, so the original goes last with the highest tier. That way the
-    # pack always starts on "Samurai (Original)" and nothing changes visually
-    # until the player chooses a fantasy skin.
-    subpacks.append({"folder_name": "original_samurai", "name": "Samurai (Original)", "memory_tier": tier})
 
-    # 2. register the subpacks in the manifest
-    manifest_path = os.path.join(PACK, "manifest.json")
-    with open(manifest_path, encoding="utf-8") as fh:
-        manifest = json.load(fh)
-    manifest["subpacks"] = subpacks
-    manifest["header"]["description"] = (
-        "Custom elytra skins - pick a variant in Pack Settings. By xVoid Axell"
-    )
-    with open(manifest_path, "w", encoding="utf-8") as fh:
-        json.dump(manifest, fh, indent=2, ensure_ascii=False)
-        fh.write("\n")
-    print("manifest updated with", len(subpacks), "subpacks")
+def main():
+    subpacks = generate()
+    for sub in subpacks:
+        print("generated", sub["folder_name"], "->", sub["name"])
+    print("%d recolour subpacks ready" % len(subpacks))
 
 
 if __name__ == "__main__":

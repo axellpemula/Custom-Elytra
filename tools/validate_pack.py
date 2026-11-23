@@ -144,6 +144,58 @@ def check_geometry(tex_rel):
     return tw, th
 
 
+def check_subpack_models(subpacks):
+    """Design subpacks (the ones that ship models/) must be self consistent."""
+    for sub in subpacks:
+        folder = sub.get("folder_name")
+        if not folder:
+            continue
+        base = os.path.join(PACK, "subpacks", folder)
+        att = os.path.join(base, "attachables", "elytra.json")
+        if not os.path.exists(att):
+            continue  # recolour subpacks only override the texture
+        try:
+            with open(att, encoding="utf-8-sig") as fh:
+                desc = json.load(fh)["minecraft:attachable"]["description"]
+        except Exception as exc:  # noqa: BLE001
+            errors.append("subpack %r: bad attachable (%s)" % (folder, exc))
+            continue
+
+        geo_id = desc.get("geometry", {}).get("default")
+        geo_path = os.path.join(base, "models", "mobs.json")
+        if not os.path.exists(geo_path):
+            errors.append("subpack %r: attachable but no models/mobs.json" % folder)
+            continue
+        try:
+            with open(geo_path, encoding="utf-8-sig") as fh:
+                geos = json.load(fh).get("minecraft:geometry", [])
+        except Exception as exc:  # noqa: BLE001
+            errors.append("subpack %r: bad models/mobs.json (%s)" % (folder, exc))
+            continue
+        ids = [g.get("description", {}).get("identifier") for g in geos]
+        if geo_id not in ids:
+            errors.append("subpack %r: geometry %r not found in models/mobs.json" % (folder, geo_id))
+
+        tex = desc.get("textures", {}).get("default", "")
+        if tex and not os.path.exists(os.path.join(base, tex + ".png")):
+            errors.append("subpack %r: texture %s.png missing" % (folder, tex))
+        ctrl = desc.get("animations", {}).get("default_controller")
+        ctrl_files = []
+        for root, _dirs, files in os.walk(base):
+            ctrl_files += [os.path.join(root, f) for f in files if f.endswith(".json")]
+        found_ctrl = False
+        for cf in ctrl_files:
+            try:
+                with open(cf, encoding="utf-8-sig") as fh:
+                    if "animation_controllers" in json.load(fh):
+                        found_ctrl = True
+                        break
+            except Exception:  # noqa: BLE001
+                continue
+        if ctrl and not found_ctrl:
+            errors.append("subpack %r: animation controller %r has no file" % (folder, ctrl))
+
+
 def check_subpack_textures(subpacks, tex_rel):
     if not tex_rel:
         return
@@ -165,6 +217,7 @@ def main():
     tex_rel = check_attachable()
     check_geometry(tex_rel)
     check_subpack_textures(subpacks, tex_rel)
+    check_subpack_models(subpacks)
 
     for w in warnings:
         print("WARN  " + w)

@@ -1,0 +1,186 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.seraph.idle": {
+      "loop": true,
+      "animation_length": 4.0,
+      "bones": {
+        "seraph_wing_l": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              4
+            ],
+            "2.0": [
+              0,
+              0,
+              9
+            ],
+            "4.0": [
+              0,
+              0,
+              4
+            ]
+          }
+        },
+        "seraph_wing_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -4
+            ],
+            "2.0": [
+              0,
+              0,
+              -9
+            ],
+            "4.0": [
+              0,
+              0,
+              -4
+            ]
+          }
+        }
+      }
+    },
+    "animation.seraph.glide": {
+      "loop": true,
+      "animation_length": 1.2,
+      "bones": {
+        "seraph_wing_l": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              26
+            ],
+            "0.45": [
+              0,
+              0,
+              -8
+            ],
+            "0.8": [
+              0,
+              0,
+              20
+            ],
+            "1.2": [
+              0,
+              0,
+              26
+            ]
+          }
+        },
+        "seraph_wing_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              -26
+            ],
+            "0.45": [
+              0,
+              0,
+              8
+            ],
+            "0.8": [
+              0,
+              0,
+              -20
+            ],
+            "1.2": [
+              0,
+              0,
+              -26
+            ]
+          }
+        }
+      }
+    },
+    "animation.seraph.sneak": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.3,
+      "bones": {
+        "seraph_wing_l": {
+          "rotation": [
+            0,
+            62,
+            -18
+          ]
+        },
+        "seraph_wing_r": {
+          "rotation": [
+            0,
+            -62,
+            18
+          ]
+        }
+      }
+    },
+    "animation.seraph.swim": {
+      "loop": true,
+      "animation_length": 2.0,
+      "bones": {
+        "seraph_wing_l": {
+          "rotation": {
+            "0.0": [
+              0,
+              -18,
+              -12
+            ],
+            "1.0": [
+              0,
+              -26,
+              -4
+            ],
+            "2.0": [
+              0,
+              -18,
+              -12
+            ]
+          }
+        },
+        "seraph_wing_r": {
+          "rotation": {
+            "0.0": [
+              0,
+              18,
+              12
+            ],
+            "1.0": [
+              0,
+              26,
+              4
+            ],
+            "2.0": [
+              0,
+              18,
+              12
+            ]
+          }
+        }
+      }
+    },
+    "animation.seraph.sleep": {
+      "loop": true,
+      "bones": {
+        "seraph_wing_l": {
+          "rotation": [
+            0,
+            70,
+            -30
+          ]
+        },
+        "seraph_wing_r": {
+          "rotation": [
+            0,
+            -70,
+            30
+          ]
+        }
+      }
+    }
+  }
+}
