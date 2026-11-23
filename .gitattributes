@@ -1,0 +1,3 @@
+# keep the packed addons binary so `git diff` stays readable
+*.mcpack binary
+*.png binary
